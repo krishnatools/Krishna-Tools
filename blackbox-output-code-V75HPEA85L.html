@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishnaGrind Tools - Free Calculator & Study Tools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; text-align: center; }
+        h1 { color: #fff; font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .subtitle { color: #f0f8ff; font-size: 1.2em; margin-bottom: 30px; }
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .tool-card { background: rgba(255,255,255,0.95); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s; }
+        .tool-card:hover { transform: translateY(-5px); }
+        .tool-card h3 { color: #667eea; margin-bottom: 15px; font-size: 1.5em; }
+        .calc-screen { width: 100%; height: 60px; font-size: 24px; text-align: right; padding: 0 15px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 8px; background: #f8f9fa; }
+        .calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        button { height: 60px; font-size: 20px; border: none; border-radius: 8px; background: #667eea; color: white; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #5a67d8; }
+        button.operator { background: #e53e3e; }
+        button.operator:hover { background: #c53030; }
+        button.equals { background: #38a169; grid-column: span 2; }
+        button.equals:hover { background: #2f855a; }
+        button.clear { background: #ed8936; }
+        button.clear:hover { background: #dd6b20; }
+        .footer { background: #333; color: white; padding: 20px; margin-top: 40px; }
+        .footer a { color: #667eea; text-decoration: none; }
+        @media (max-width: 600px) { .tool-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ KrishnaGrind Tools</h1>
+        <p class="subtitle">Free tools by 15yo student grinding to millionaire | Made with ❤️</p>
+        
+        <div class="tool-grid">
+            <div class="tool-card">
+                <h3>🔢 Smart Calculator</h3>
+                <input type="text" class="calc-screen" id="calcScreen" readonly>
+                <div class="calc-buttons">
+                    <button class="clear" onclick="clearCalc()">C</button>
+                    <button class="clear" onclick="backspace()">⌫</button>
+                    <button class="operator" onclick="appendCalc('/')">/</button>
+                    <button class="operator" onclick="appendCalc('*')">×</button>
+                    <button onclick="appendCalc('7')">7</button>
+                    <button onclick="appendCalc('8')">8</button>
+                    <button onclick="appendCalc('9')">9</button>
+                    <button class="operator" onclick="appendCalc('-')">-</button>
+                    <button onclick="appendCalc('4')">4</button>
+                    <button onclick="appendCalc('5')">5</button>
+                    <button onclick="appendCalc('6')">6</button>
+                    <button class="operator" onclick="appendCalc('+')">+</button>
+                    <button onclick="appendCalc('1')">1</button>
+                    <button onclick="appendCalc('2')">2</button>
+                    <button onclick="appendCalc('3')">3</button>
+                    <button class="equals" onclick="calculate()">=</button>
+                    <button onclick="appendCalc('0')" style="grid-column: span 2;">0</button>
+                    <button onclick="appendCalc('.')">.</button>
+                </div>
+            </div>
+            
+            <div class="tool-card">
+                <h3>⏱️ Study Timer (Pomodoro)</h3>
+                <h2 id="timer" style="font-size: 3em; color: #667eea;">25:00</h2>
+                <button onclick="startTimer()" style="font-size: 1.2em; padding: 15px 30px;">Start 25min</button>
+                <p>Focus → Break → Repeat = Topper mode!</p>
+            </div>
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h3>💰 Get Study Tools (Affiliate)</h3>
+            <p>Best notebooks & pens I use:</p>
+            <a href="https://amzn.to/3XXXXXX" target="_blank" style="background: #ff9900; color: white; padding: 12px 24px; text-decoration: none; border-radius: 25px; font-weight: bold;">Buy on Amazon ₹199 → My Link</a>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Made by <a href="https://youtube.com/@KrishnaGrind">@KrishnaGrind</a> | Subscribe for more tools! 🔥 | <a href="#">Privacy</a></p>
+    </div>
+
+    <script>
+        // Calculator
+        let calcScreen = document.getElementById('calcScreen');
+        function appendCalc(value) { calcScreen.value += value; }
+        function clearCalc() { calcScreen.value = ''; }
+        function backspace() { calcScreen.value = calcScreen.value.slice(0, -1); }
+        function calculate() {
+            try {
+                calcScreen.value = eval(calcScreen.value.replace('×', '*'));
+            } catch { calcScreen.value = 'Error'; }
+        }
+
+        // Timer
+        let timeLeft = 25 * 60;
+        let timerRunning = false;
+        function startTimer() {
+            if (!timerRunning) {
+                timerRunning = true;
+                let timer = setInterval(() => {
+                    let minutes = Math.floor(timeLeft / 60);
+                    let seconds = timeLeft % 60;
+                    document.getElementById('timer').textContent = 
+                        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    timeLeft--;
+                    if (timeLeft < 0) {
+                        clearInterval(timer);
+                        alert('Pomodoro Complete! 🎉 Take 5 min break');
+                        timeLeft = 25 * 60;
+                        timerRunning = false;
+                    }
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
